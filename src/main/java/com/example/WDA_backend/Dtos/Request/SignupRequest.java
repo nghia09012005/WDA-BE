@@ -5,6 +5,10 @@ public class SignupRequest {
     private String password;
     private String email;
 
+    // Constructor mặc định cần thiết để Spring có thể deserialize
+    public SignupRequest() {
+    }
+
     public SignupRequest(String username, String password, String email) {
         this.username = username;
         this.password = password;

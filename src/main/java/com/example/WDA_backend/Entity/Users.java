@@ -3,7 +3,7 @@ package com.example.WDA_backend.Entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.Id;
 
 import java.security.PrivateKey;
 
@@ -17,6 +17,10 @@ public class Users {
     private String username;
     private String password;
     private String email;
+
+    // Constructor mặc định cần thiết cho JPA
+    public Users() {
+    }
 
     public Users( String username, String password, String email) {
 
@@ -51,5 +55,13 @@ public class Users {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
