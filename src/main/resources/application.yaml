@@ -6,7 +6,7 @@ spring:
   datasource:
     url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/WDA}
     driverClassName: "com.mysql.cj.jdbc.Driver"
-    password: ${DBMS_PASSWORD:minhtienhuynh5}
+    password: ${DBMS_PASSWORD:root}
     username: ${DBMS_USERNAME:root}
   jpa:
     hibernate:
