@@ -25,11 +25,10 @@ public class AuthenticationService {
     }
 
     public boolean Signin(SigninRequest user){
-        Optional<Users> us = repo.findByUsername(user.getUsername());
+        Optional<Users> us = repo.findByEmail(user.getEmail());
         if (us.isPresent()) {
             Users com = us.get();
-            return com.getUsername().equals(user.getUsername()) &&
-                    com.getPassword().equals(user.getPassword());
+            return com.getPassword().equals(user.getPassword());
         }
 
         return false;

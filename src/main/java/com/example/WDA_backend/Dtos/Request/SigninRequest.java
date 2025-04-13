@@ -1,7 +1,7 @@
 package com.example.WDA_backend.Dtos.Request;
 
 public class SigninRequest {
-    String username;
+    
     String password;
     String email;
 
@@ -9,18 +9,9 @@ public class SigninRequest {
     public SigninRequest() {
     }
 
-    public SigninRequest(String username, String password, String email) {
-        this.username = username;
+    public SigninRequest(String password, String email) {
         this.password = password;
         this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
