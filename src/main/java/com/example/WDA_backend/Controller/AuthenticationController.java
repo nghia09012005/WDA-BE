@@ -26,8 +26,8 @@ public class AuthenticationController {
 
     @PostMapping("/signin")
     ApiResponse Signin(@RequestBody SigninRequest request){
-        if(service.Signin(request)){
-            return new ApiResponse("1000");
+        if(service.Signin(request) != null){
+            return new ApiResponse("1000",service.Signin(request));
         }
         return new ApiResponse("1001");
     }
