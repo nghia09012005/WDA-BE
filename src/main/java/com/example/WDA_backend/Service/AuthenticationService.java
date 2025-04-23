@@ -3,6 +3,7 @@ package com.example.WDA_backend.Service;
 import com.example.WDA_backend.Configuration.JwtUtil;
 import com.example.WDA_backend.Dtos.Request.SigninRequest;
 import com.example.WDA_backend.Dtos.Request.SignupRequest;
+import com.example.WDA_backend.Dtos.Response.SigninResponse;
 import com.example.WDA_backend.Entity.UserStats;
 import com.example.WDA_backend.Entity.Users;
 import com.example.WDA_backend.Repository.UserRepo;
@@ -50,12 +51,13 @@ public class AuthenticationService {
         return false;
     }
 
-    public Optional<String> Signin(SigninRequest user) {
+    public Optional<SigninResponse> Signin(SigninRequest user) {
         Optional<Users> us = repo.findByEmail(user.getEmail());
         if (us.isPresent()) {
             Users com = us.get();
             if (encoder.matches(user.getPassword(), com.getPassword())) {
-                return Optional.of(jwtUtil.generateToken(com.getUsername(),com.getId()));
+                String token = jwtUtil.generateToken(com.getUsername(),com.getId());
+                return Optional.of(new SigninResponse(token, com.getUsername()));
             }
         }
         return Optional.empty();

@@ -4,6 +4,7 @@ package com.example.WDA_backend.Controller;
 import com.example.WDA_backend.Dtos.Request.SigninRequest;
 import com.example.WDA_backend.Dtos.Request.SignupRequest;
 import com.example.WDA_backend.Dtos.Response.ApiResponse;
+import com.example.WDA_backend.Dtos.Response.SigninResponse;
 import com.example.WDA_backend.Service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,10 +31,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<ApiResponse<String>> Signin(@RequestBody SigninRequest request) {
+    public ResponseEntity<ApiResponse<SigninResponse>> Signin(@RequestBody SigninRequest request) {
         // Kiểm tra nếu đăng nhập thành công
         return service.Signin(request)
-                .map(token -> new ResponseEntity<>(new ApiResponse<>("1000", token), HttpStatus.OK)) // Trả về token với status 200 (OK)
-                .orElseGet(() -> new ResponseEntity<>(new ApiResponse<>("1002", "email or password was wrong"), HttpStatus.UNAUTHORIZED)); // Trả về status 401 (Unauthorized) nếu sai credentials
+                .map(result -> new ResponseEntity<>(new ApiResponse<>("1000", result), HttpStatus.OK)) // Trả về token với status 200 (OK)
+                .orElseGet(() -> new ResponseEntity<>(new ApiResponse<>("1002", new SigninResponse()), HttpStatus.UNAUTHORIZED)); // Trả về status 401 (Unauthorized) nếu sai credentials
     }
 }
