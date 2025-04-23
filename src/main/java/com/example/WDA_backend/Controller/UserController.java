@@ -1,9 +1,12 @@
 package com.example.WDA_backend.Controller;
 
 import com.example.WDA_backend.Dtos.Response.ApiResponse;
+import com.example.WDA_backend.Entity.UserStats;
 import com.example.WDA_backend.Entity.Users;
 import com.example.WDA_backend.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +33,17 @@ public class UserController {
         } else {
             return new ApiResponse("1001", "User not found");
         }
+    }
+
+    @GetMapping("/stats/{name}")
+    public ResponseEntity<ApiResponse<UserStats>> getUserStats(@PathVariable String name) {
+        UserStats userStats = userService.getUserStatsByUsername(name);
+
+        if (userStats != null) {
+            return new ResponseEntity<>(new ApiResponse<>("1000", userStats), HttpStatus.OK); // Trả về thông tin UserStats
+        }
+        return new ResponseEntity<>(new ApiResponse<>("1003", null  ), HttpStatus.NOT_FOUND); // Trường hợp không tìm thấy người dùng
+
     }
 
 

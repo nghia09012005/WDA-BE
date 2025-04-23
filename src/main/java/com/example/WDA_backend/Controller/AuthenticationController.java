@@ -6,6 +6,8 @@ import com.example.WDA_backend.Dtos.Request.SignupRequest;
 import com.example.WDA_backend.Dtos.Response.ApiResponse;
 import com.example.WDA_backend.Service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,22 +19,21 @@ public class AuthenticationController {
     private AuthenticationService service;
 
     @PostMapping("/signup")
-    ApiResponse Signup(@RequestBody SignupRequest request){
-        if(service.Signup(request)){
-            return new ApiResponse("1000");
+    public ResponseEntity<ApiResponse<String>> Signup(@RequestBody SignupRequest request) {
+        // Kiểm tra nếu đăng ký thành công
+        if (service.Signup(request)) {
+            // Trả về status 201 (Created) khi user được tạo thành công
+            return new ResponseEntity<>(new ApiResponse<>("1000", "User created successfully"), HttpStatus.CREATED);
         }
-        return new ApiResponse("1001");
+        // Trả về status 400 (Bad Request) nếu username đã tồn tại
+        return new ResponseEntity<>(new ApiResponse<>("1001", "Username has already been existed"), HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/signin")
-    ApiResponse Signin(@RequestBody SigninRequest request){
-        if(service.Signin(request) != null){
-            return new ApiResponse("1000",service.Signin(request));
-        }
-        return new ApiResponse("1001");
+    public ResponseEntity<ApiResponse<String>> Signin(@RequestBody SigninRequest request) {
+        // Kiểm tra nếu đăng nhập thành công
+        return service.Signin(request)
+                .map(token -> new ResponseEntity<>(new ApiResponse<>("1000", token), HttpStatus.OK)) // Trả về token với status 200 (OK)
+                .orElseGet(() -> new ResponseEntity<>(new ApiResponse<>("1002", "email or password was wrong"), HttpStatus.UNAUTHORIZED)); // Trả về status 401 (Unauthorized) nếu sai credentials
     }
-
-
-
-
 }

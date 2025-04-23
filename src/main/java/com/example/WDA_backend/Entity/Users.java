@@ -1,9 +1,6 @@
 package com.example.WDA_backend.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.security.PrivateKey;
 
@@ -17,6 +14,9 @@ public class Users {
     private String username;
     private String password;
     private String email;
+
+    @OneToOne(mappedBy = "user")
+    private UserStats userStats;
 
     // Constructor mặc định cần thiết cho JPA
     public Users() {

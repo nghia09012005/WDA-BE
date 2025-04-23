@@ -7,12 +7,14 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private final String SECRET = "your-secret-key";
+//    but secrect key to application.yaml
+    private final String SECRET = "7aff43c7f83baa7d8638243ab53bc36034fde85e25ec6f5f2cd300907a1d670d";
     private final long EXPIRATION = 1000 * 60 * 60 * 10; // 10 giờ
 
-    public String generateToken(String username) {
+    public String generateToken(String username, String Id) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("Id", Id)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(SignatureAlgorithm.HS256, SECRET)

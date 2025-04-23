@@ -3,8 +3,10 @@ package com.example.WDA_backend.Service;
 import com.example.WDA_backend.Configuration.JwtUtil;
 import com.example.WDA_backend.Dtos.Request.SigninRequest;
 import com.example.WDA_backend.Dtos.Request.SignupRequest;
+import com.example.WDA_backend.Entity.UserStats;
 import com.example.WDA_backend.Entity.Users;
 import com.example.WDA_backend.Repository.UserRepo;
+import com.example.WDA_backend.Repository.UserStatsRepo;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,6 +20,9 @@ public class AuthenticationService {
     private UserRepo repo;
 
     @Autowired
+    private UserStatsRepo userStatsRepo;
+
+    @Autowired
     private BCryptPasswordEncoder encoder;
 
     @Autowired
@@ -26,21 +31,33 @@ public class AuthenticationService {
 
     public boolean Signup(SignupRequest user){
         if(!repo.existsByUsername(user.getUsername())){
+            // Mã hóa mật khẩu và lưu người dùng
             String hashedPassword = encoder.encode(user.getPassword());
-            repo.save(new Users(user.getUsername(), hashedPassword, user.getEmail()));
+            Users newUser = new Users(user.getUsername(), hashedPassword, user.getEmail());
+            repo.save(newUser);
+
+            // Tạo đối tượng UserStats với giá trị exp = 0 và money = 0
+            UserStats userStats = new UserStats();
+            userStats.setUser(newUser); // Gán người dùng vừa tạo
+            userStats.setExp(0); // Giá trị mặc định
+            userStats.setMoney(0); // Giá trị mặc định
+
+            // Lưu UserStats
+            userStatsRepo.save(userStats);
+
             return true;
         }
         return false;
     }
 
-    public String Signin(SigninRequest user){
+    public Optional<String> Signin(SigninRequest user) {
         Optional<Users> us = repo.findByEmail(user.getEmail());
         if (us.isPresent()) {
             Users com = us.get();
             if (encoder.matches(user.getPassword(), com.getPassword())) {
-                return jwtUtil.generateToken(com.getUsername());
+                return Optional.of(jwtUtil.generateToken(com.getUsername(),com.getId()));
             }
         }
-        return null;
+        return Optional.empty();
     }
 }

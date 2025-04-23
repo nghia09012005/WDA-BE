@@ -1,6 +1,8 @@
 package com.example.WDA_backend.Configuration;
 
+import com.example.WDA_backend.Dtos.Response.ApiResponse;
 import com.example.WDA_backend.Service.MyUserDetailsService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,8 +53,20 @@ public class JwtFilter extends OncePerRequestFilter {
 
         } catch (Exception e) {
             System.out.println("JWT Filter Error: " + e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            sendErrorResponse(response,"JWT Error: " + e.getMessage() );
+            return ;
         }
 
         chain.doFilter(request, response);
+    }
+    private void sendErrorResponse(HttpServletResponse response, String message) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+
+        ApiResponse<String> apiResponse = new ApiResponse<>("1001", message);
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write(mapper.writeValueAsString(apiResponse));
     }
 }
