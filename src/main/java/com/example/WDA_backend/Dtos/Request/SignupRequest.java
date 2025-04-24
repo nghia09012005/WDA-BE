@@ -3,7 +3,7 @@ package com.example.WDA_backend.Dtos.Request;
 public class SignupRequest {
     private String username;
     private String password;
-    private String email;
+
 
     // Constructor mặc định cần thiết để Spring có thể deserialize
     public SignupRequest() {
@@ -12,7 +12,7 @@ public class SignupRequest {
     public SignupRequest(String username, String password, String email) {
         this.username = username;
         this.password = password;
-        this.email = email;
+
     }
 
     public String getUsername() {
@@ -31,11 +31,4 @@ public class SignupRequest {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

@@ -13,7 +13,7 @@ public class Users {
 
     private String username;
     private String password;
-    private String email;
+
 
     @OneToOne(mappedBy = "user")
     private UserStats userStats;
@@ -22,16 +22,11 @@ public class Users {
     public Users() {
     }
 
-    public Users( String username, String password, String email) {
+    public Users( String username, String password) {
 
         this.username = username;
         this.password = password;
-        this.email = email;
     }
-
-
-
-
 
     public String getUsername() {
         return username;
@@ -49,13 +44,7 @@ public class Users {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getId() {
         return id;

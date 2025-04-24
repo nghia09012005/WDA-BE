@@ -4,10 +4,12 @@ import com.example.WDA_backend.Entity.UserStats;
 import com.example.WDA_backend.Entity.Users;
 import com.example.WDA_backend.Repository.UserRepo;
 import com.example.WDA_backend.Repository.UserStatsRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -22,10 +24,14 @@ public class UserService {
         return repo.findAll(); // Trả về tất cả người dùng từ DB
     }
 
+    @Transactional
     public boolean deleteUsers(String id) {
-        // Kiểm tra người dùng có tồn tại trong cơ sở dữ liệu không
         if (repo.existsById(id)) {
-            repo.deleteById(id);
+            Optional<Users> userOptional = repo.findById(id);
+            userOptional.ifPresent(user -> {
+                userStatsRepo.deleteByUserId(user.getId()); // Xóa UserStats liên quan đến User
+            });
+            repo.deleteById(id); // Xóa người dùng
             return true; // Xóa thành công
         }
         return false; // Người dùng không tồn tại

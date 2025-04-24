@@ -34,7 +34,7 @@ public class AuthenticationService {
         if(!repo.existsByUsername(user.getUsername())){
             // Mã hóa mật khẩu và lưu người dùng
             String hashedPassword = encoder.encode(user.getPassword());
-            Users newUser = new Users(user.getUsername(), hashedPassword, user.getEmail());
+            Users newUser = new Users(user.getUsername(), hashedPassword);
             repo.save(newUser);
 
             // Tạo đối tượng UserStats với giá trị exp = 0 và money = 0
@@ -52,7 +52,7 @@ public class AuthenticationService {
     }
 
     public Optional<SigninResponse> Signin(SigninRequest user) {
-        Optional<Users> us = repo.findByEmail(user.getEmail());
+        Optional<Users> us = repo.findByUsername(user.getUsername());
         if (us.isPresent()) {
             Users com = us.get();
             if (encoder.matches(user.getPassword(), com.getPassword())) {

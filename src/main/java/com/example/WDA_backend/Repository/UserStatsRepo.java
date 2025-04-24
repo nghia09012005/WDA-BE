@@ -14,4 +14,6 @@ public interface UserStatsRepo extends JpaRepository<UserStats, String> {
 
     @Query("SELECT us FROM UserStats us WHERE us.user.username = :username")
     Optional<UserStats> findByUsername(String username);
+
+    void deleteByUserId(String userId);
 }
