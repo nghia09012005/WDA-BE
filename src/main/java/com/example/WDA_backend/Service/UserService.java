@@ -1,5 +1,7 @@
 package com.example.WDA_backend.Service;
 
+import com.example.WDA_backend.Dtos.Request.ItemRequest;
+import com.example.WDA_backend.Dtos.Request.MoneyExpRequest;
 import com.example.WDA_backend.Entity.UserStats;
 import com.example.WDA_backend.Entity.Users;
 import com.example.WDA_backend.Repository.UserRepo;
@@ -39,6 +41,41 @@ public class UserService {
 
     public UserStats getUserStatsByUsername(String username) {
         return userStatsRepo.findByUsername(username).orElse(null); // Tìm kiếm UserStats theo userId
+    }
+
+    public UserStats setStatsByUsername(ItemRequest request){
+        String item = request.getItem();
+        UserStats userStats = userStatsRepo.findByUsername(request.getUsername()).orElse(null);
+        if(userStats == null){return null ;}
+        if ("congchieng".equals(item)) {
+            userStats.setCongchieng(true);
+        } else if ("co".equals(item)) {
+            userStats.setCo(true);
+        } else if ("thu".equals(item)) {
+            userStats.setThu(true);
+        } else if ("tranh".equals(item)) {
+            userStats.setTranh(true);
+        } else if ("quanho".equals(item)) {
+            userStats.setQuanho(true);
+        } else if ("trongdong".equals(item)) {
+            userStats.setTrongdong(true);
+        }
+        userStatsRepo.save(userStats);
+        return userStats;
+    }
+
+    public UserStats setMoneyExp(MoneyExpRequest request){
+        String object  = request.getObject();
+        UserStats userStats = userStatsRepo.findByUsername(request.getUsername()).orElse(null);
+        if(userStats == null){return null ;}
+        if(object.equals("money")){
+            userStats.setMoney(userStats.getMoney()+request.getAmount());
+        }
+        else{
+            userStats.setExp(userStats.getExp()+request.getAmount());
+        }
+        userStatsRepo.save(userStats);
+        return userStats;
     }
 
 }

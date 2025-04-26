@@ -1,5 +1,7 @@
 package com.example.WDA_backend.Controller;
 
+import com.example.WDA_backend.Dtos.Request.ItemRequest;
+import com.example.WDA_backend.Dtos.Request.MoneyExpRequest;
 import com.example.WDA_backend.Dtos.Response.ApiResponse;
 import com.example.WDA_backend.Entity.UserStats;
 import com.example.WDA_backend.Entity.Users;
@@ -43,7 +45,24 @@ public class UserController {
             return new ResponseEntity<>(new ApiResponse<>("1000", userStats), HttpStatus.OK); // Trả về thông tin UserStats
         }
         return new ResponseEntity<>(new ApiResponse<>("1003", null  ), HttpStatus.NOT_FOUND); // Trường hợp không tìm thấy người dùng
+    }
 
+    @PostMapping("/stats/set")
+    public ResponseEntity<ApiResponse<UserStats>> setUserStats(@RequestBody ItemRequest request){
+        UserStats userStats = userService.setStatsByUsername(request);
+        if(userStats != null){
+            return new ResponseEntity<>(new ApiResponse<>("1000", userStats), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ApiResponse<>("1003", null  ), HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/stats/me")
+    public ResponseEntity<ApiResponse<UserStats>> setUserMe(@RequestBody MoneyExpRequest request){
+        UserStats userStats = userService.setMoneyExp(request);
+        if(userStats != null){
+            return new ResponseEntity<>(new ApiResponse<>("1000", userStats), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ApiResponse<>("1003", null  ), HttpStatus.NOT_FOUND);
     }
 
 
