@@ -3,6 +3,7 @@ package com.example.WDA_backend.Controller;
 import com.example.WDA_backend.Dtos.Request.ItemRequest;
 import com.example.WDA_backend.Dtos.Request.MoneyExpRequest;
 import com.example.WDA_backend.Dtos.Response.ApiResponse;
+import com.example.WDA_backend.Dtos.Response.UserResponseDto;
 import com.example.WDA_backend.Entity.UserStats;
 import com.example.WDA_backend.Entity.Users;
 import com.example.WDA_backend.Service.UserService;
@@ -25,6 +26,14 @@ public class UserController {
     public List<Users> getAllUsers() {
         return userService.getUsers(); // Trả về danh sách tất cả người dùng
     }
+
+
+    // Updated Controller Method
+    @GetMapping("/uswst")
+    public List<UserResponseDto> getAllUserwst() {
+        return userService.getUsersWithStats(); // Fetch users with stats
+    }
+
 
     @DeleteMapping("/{id}")
     public ApiResponse deleteUser(@PathVariable String id) {

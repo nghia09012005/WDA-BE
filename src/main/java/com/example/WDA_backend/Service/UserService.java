@@ -2,6 +2,7 @@ package com.example.WDA_backend.Service;
 
 import com.example.WDA_backend.Dtos.Request.ItemRequest;
 import com.example.WDA_backend.Dtos.Request.MoneyExpRequest;
+import com.example.WDA_backend.Dtos.Response.UserResponseDto;
 import com.example.WDA_backend.Entity.UserStats;
 import com.example.WDA_backend.Entity.Users;
 import com.example.WDA_backend.Repository.UserRepo;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -25,6 +27,15 @@ public class UserService {
     public List<Users> getUsers() {
         return repo.findAll(); // Trả về tất cả người dùng từ DB
     }
+
+    public List<UserResponseDto> getUsersWithStats() {
+        List<Users> users = repo.findAll(); // Fetch all users
+        return users.stream().map(user -> {
+            UserStats stats = userStatsRepo.findByUserId(user.getId()).orElse(null);
+            return new UserResponseDto(user, stats); // Combine user and stats
+        }).collect(Collectors.toList());
+    }
+
 
     @Transactional
     public boolean deleteUsers(String id) {
