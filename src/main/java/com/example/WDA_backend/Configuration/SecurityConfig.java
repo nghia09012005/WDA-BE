@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private static final String[] PUBLIC_ENDPOINT = {"/api/signin", "/api/signup"};
+    private static final String[] PUBLIC_ENDPOINT = {"/api/signin", "/api/signup","api/users","api/users/uswt","api/users/{id}","api/users/stats/{name}","api/users/stats/set","api/users//stats/me"};
 
     @Autowired
     private JwtFilter jwtFilter;
