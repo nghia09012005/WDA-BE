@@ -1,17 +1,14 @@
-# Sử dụng OpenJDK 17 làm hình ảnh cơ sở
+# Base image: OpenJDK 17
 FROM openjdk:17-jdk-slim
 
-# Cài đặt Maven
-RUN apt-get update && apt-get install -y maven
-
-# Đặt thư mục làm việc trong container
+# Đặt thư mục làm việc
 WORKDIR /app
 
-# Sao chép tất cả tệp từ thư mục hiện tại vào trong container
+# Copy toàn bộ mã nguồn vào container
 COPY . /app
 
-# Chạy lệnh Maven để build ứng dụng
-RUN mvn clean package -DskipTests
+# Cài Maven và build app
+RUN apt-get update && apt-get install -y maven && mvn clean package -DskipTests
 
-# Lệnh để chạy ứng dụng khi container khởi động
+# Chạy ứng dụng
 CMD ["java", "-jar", "target/WDA-backend-0.0.1-SNAPSHOT.jar"]
