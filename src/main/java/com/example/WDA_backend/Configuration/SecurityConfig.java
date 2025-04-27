@@ -47,7 +47,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://wda2025.vercel.app")); // Use http:// as in your WebConfig
+        configuration.setAllowedOrigins(List.of("https://wda2025.vercel.app")); // Use http:// as in your WebConfig
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // Be specific if possible
         configuration.setAllowCredentials(true);
