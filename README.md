@@ -22,8 +22,7 @@ Dự án "Hành trình di sản" là một trò chơi mô phỏng du hành thờ
 
 1. Clone repository:
 ```
-git clone https://github.com/your-username/heritage-journey-backend.git
-cd heritage-journey-backend
+git clone https://github.com/nghia09012005/WDA-BE.git
 ```
 
 2. Cài dependencies và build project:
