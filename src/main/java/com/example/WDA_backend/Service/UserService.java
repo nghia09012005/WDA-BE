@@ -23,6 +23,9 @@ public class UserService {
     @Autowired
     private UserStatsRepo userStatsRepo;
 
+    @Autowired
+    private RedisService redis;
+
     // Trả về danh sách tất cả người dùng
     public List<Users> getUsers() {
         return repo.findAll(); // Trả về tất cả người dùng từ DB
@@ -37,7 +40,6 @@ public class UserService {
     }
 
 
-    @Transactional
     public boolean deleteUsers(String id) {
         if (repo.existsById(id)) {
             Optional<Users> userOptional = repo.findById(id);
@@ -51,6 +53,7 @@ public class UserService {
     }
 
     public UserStats getUserStatsByUsername(String username) {
+        redis.deleteFromRedis("user:"+username);
         return userStatsRepo.findByUsername(username).orElse(null); // Tìm kiếm UserStats theo userId
     }
 
@@ -71,22 +74,77 @@ public class UserService {
         } else if ("trongdong".equals(item)) {
             userStats.setTrongdong(true);
         }
+
+        String val = redis.getValue("user:"+request.getUsername());
+        String[] parts = val.split(" ");
+        double money = Double.parseDouble(parts[0]);
+        int exp = Integer.parseInt(parts[1]);
+        userStats.setMoney(money);
+        userStats.setExp(exp);
+
         userStatsRepo.save(userStats);
+
+
         return userStats;
     }
 
-    public UserStats setMoneyExp(MoneyExpRequest request){
-        String object  = request.getObject();
-        UserStats userStats = userStatsRepo.findByUsername(request.getUsername()).orElse(null);
-        if(userStats == null){return null ;}
-        if(object.equals("money")){
-            userStats.setMoney(userStats.getMoney()+request.getAmount());
+    public UserStats setMoneyExp(MoneyExpRequest request) {
+        String object = request.getObject();
+        String redisKey = "user:" + request.getUsername();
+
+        // Kiểm tra dữ liệu có trong Redis không
+        String val = redis.getValue(redisKey);
+
+        if (val == null || val.isEmpty()) {
+            // Dữ liệu không có trong Redis, truy vấn từ DB
+            UserStats userStats = userStatsRepo.findByUsername(request.getUsername()).orElse(null);
+            if (userStats == null) {
+                return null; // Người dùng không tồn tại trong DB
+            }
+
+            // Cập nhật dữ liệu trong DB
+            if (object.equals("money")) {
+                userStats.setMoney(userStats.getMoney() + request.getAmount());
+            } else {
+                userStats.setExp(userStats.getExp() + request.getAmount());
+            }
+
+            // Lưu vào DB
+            userStatsRepo.save(userStats);
+
+            // Lưu lại vào Redis để giảm tải DB cho lần sau
+            redis.setValue(redisKey, userStats.getMoney() + " " + userStats.getExp());
+
+            return userStats;
+        } else {
+            // Dữ liệu có trong Redis, xử lý trực tiếp
+            String[] parts = val.split(" ");
+            double money = Double.parseDouble(parts[0]);
+            int exp = Integer.parseInt(parts[1]);
+
+            if (object.equals("money")) {
+                money += request.getAmount();
+            } else {
+                exp += request.getAmount();
+            }
+
+            // Cập nhật lại Redis
+            redis.setValue(redisKey, money + " " + exp);
+
+            // Cập nhật lại DB sau khi thay đổi dữ liệu trong Redis
+            UserStats userStats = userStatsRepo.findByUsername(request.getUsername()).orElse(null);
+            if (userStats != null) {
+                if (object.equals("money")) {
+                    userStats.setMoney(money);
+                } else {
+                    userStats.setExp(exp);
+                }
+                userStatsRepo.save(userStats);
+            }
+
+            return userStats;
         }
-        else{
-            userStats.setExp(userStats.getExp()+request.getAmount());
-        }
-        userStatsRepo.save(userStats);
-        return userStats;
     }
+
 
 }

@@ -10,6 +10,7 @@ import com.example.WDA_backend.Repository.UserRepo;
 import com.example.WDA_backend.Repository.UserStatsRepo;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,9 @@ public class AuthenticationService {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private RedisService redis;
 
 
     public boolean Signup(SignupRequest user){
@@ -57,6 +61,13 @@ public class AuthenticationService {
             Users com = us.get();
             if (encoder.matches(user.getPassword(), com.getPassword())) {
                 String token = jwtUtil.generateToken(com.getUsername(),com.getId());
+
+                String username = com.getUsername();
+                UserStats userStats = userStatsRepo.findByUsername(com.getUsername()).orElse(null);
+                String val = String.valueOf(userStats.getMoney())+" "+String.valueOf(userStats.getExp());
+                redis.setValue("user:" +username, val);
+                System.out.println("user:"+username+" info:"+val);
+
                 return Optional.of(new SigninResponse(token, com.getUsername()));
             }
         }

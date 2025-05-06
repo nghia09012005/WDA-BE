@@ -6,6 +6,7 @@ import com.example.WDA_backend.Dtos.Response.ApiResponse;
 import com.example.WDA_backend.Dtos.Response.UserResponseDto;
 import com.example.WDA_backend.Entity.UserStats;
 import com.example.WDA_backend.Entity.Users;
+import com.example.WDA_backend.Service.RedisService;
 import com.example.WDA_backend.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,12 +22,21 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RedisService redisService;
+
     // API lấy danh sách tất cả người dùng
     @GetMapping
     public List<Users> getAllUsers() {
         return userService.getUsers(); // Trả về danh sách tất cả người dùng
     }
 
+//    test redis
+    @GetMapping("/test-redis")
+    public String testRedis() {
+        redisService.testRedisConnection();
+        return "Done";
+    }
 
     // Updated Controller Method
     @GetMapping("/uswst")

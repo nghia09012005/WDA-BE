@@ -23,7 +23,7 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private static final String[] PUBLIC_ENDPOINT = {"/api/signin", "/api/signup", "/api/users", "/api/users/uswt", "/api/users/{id}", "/api/users/stats/{name}", "/api/users/stats/set", "/api/users//stats/me"};
+    private static final String[] PUBLIC_ENDPOINT = {"/api/signin", "/api/signup", "/api/users", "/api/users/uswt", "/api/users/{id}", "/api/users/stats/{name}", "/api/users/stats/set", "/api/users/stats/me", "/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**","/webjars/**","/api/users/test-redis"};
 
     @Autowired
     private JwtFilter jwtFilter;

@@ -4,7 +4,6 @@ server:
 
 spring:
   datasource:
-
 #   deployed db for production
     url: jdbc:mysql://shinkansen.proxy.rlwy.net:58559/railway
     username: root
@@ -16,6 +15,12 @@ spring:
 #    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/WDA}
 #    password: ${DBMS_PASSWORD:root}
 #    username: ${DBMS_USERNAME:root}
+  redis:
+    host: redis-18995.c1.ap-southeast-1-1.ec2.redns.redis-cloud.com
+    port: 18995
+    Username: default
+    password: SYEE7Ok7r5drKYEeDaJXHAGUuagkl1JN  # Đặt mật khẩu của bạn ở đây
+    client-type: jedis
 
   jpa:
     hibernate:
