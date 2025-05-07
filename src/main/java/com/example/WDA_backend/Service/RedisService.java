@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.TimeUnit;
+
 @Service
 public class RedisService {
 
@@ -11,10 +13,11 @@ public class RedisService {
     private StringRedisTemplate redisTemplate;
 
     public void setValue(String key, String value) {
-        redisTemplate.opsForValue().set(key, value);
+        redisTemplate.opsForValue().set(key, value,20, TimeUnit.MINUTES);
     }
 
     public String getValue(String key) {
+        System.out.println("Get value from redis: " + key);
         return redisTemplate.opsForValue().get(key);
     }
 

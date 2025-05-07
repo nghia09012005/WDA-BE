@@ -66,7 +66,8 @@ public class AuthenticationService {
                 UserStats userStats = userStatsRepo.findByUsername(com.getUsername()).orElse(null);
                 String val = String.valueOf(userStats.getMoney())+" "+String.valueOf(userStats.getExp());
                 redis.setValue("user:" +username, val);
-                System.out.println("user:"+username+" info:"+val);
+                redis.getValue("user:"+username);
+//                System.out.println("user:"+username+" info:"+val);
 
                 return Optional.of(new SigninResponse(token, com.getUsername()));
             }

@@ -8,6 +8,7 @@ import com.example.WDA_backend.Entity.Users;
 import com.example.WDA_backend.Repository.UserRepo;
 import com.example.WDA_backend.Repository.UserStatsRepo;
 import jakarta.transaction.Transactional;
+import org.hibernate.dialect.BooleanDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,6 +77,7 @@ public class UserService {
         }
 
         String val = redis.getValue("user:"+request.getUsername());
+        System.out.println("val:"+val);
         String[] parts = val.split(" ");
         double money = Double.parseDouble(parts[0]);
         int exp = Integer.parseInt(parts[1]);
@@ -94,8 +96,9 @@ public class UserService {
 
         // Kiểm tra dữ liệu có trong Redis không
         String val = redis.getValue(redisKey);
-
-        if (val == null || val.isEmpty()) {
+        boolean check = redis.existsInRedis(redisKey);
+        System.out.println("check:"+check);
+        if (!check  ) {
             // Dữ liệu không có trong Redis, truy vấn từ DB
             UserStats userStats = userStatsRepo.findByUsername(request.getUsername()).orElse(null);
             if (userStats == null) {
@@ -131,19 +134,10 @@ public class UserService {
             // Cập nhật lại Redis
             redis.setValue(redisKey, money + " " + exp);
 
-            // Cập nhật lại DB sau khi thay đổi dữ liệu trong Redis
-            UserStats userStats = userStatsRepo.findByUsername(request.getUsername()).orElse(null);
-            if (userStats != null) {
-                if (object.equals("money")) {
-                    userStats.setMoney(money);
-                } else {
-                    userStats.setExp(exp);
-                }
-                userStatsRepo.save(userStats);
-            }
+          }
 
-            return userStats;
-        }
+            return new UserStats();
+
     }
 
 
