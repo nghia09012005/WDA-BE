@@ -13,7 +13,7 @@ public class RedisService {
     private StringRedisTemplate redisTemplate;
 
     public void setValue(String key, String value) {
-        redisTemplate.opsForValue().set(key, value,20, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(key, value,20, TimeUnit.HOURS);
     }
 
     public String getValue(String key) {
