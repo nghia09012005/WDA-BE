@@ -5,16 +5,17 @@ server:
 spring:
   datasource:
 #   deployed db for production
-    url: jdbc:mysql://shinkansen.proxy.rlwy.net:58559/railway
-    username: root
-    password: SvTfaiLrMRBvaFjrbiFfouIxaCdSzXZr
+#    url: jdbc:mysql://shinkansen.proxy.rlwy.net:58559/railway
+#    username: root
+#    password: SvTfaiLrMRBvaFjrbiFfouIxaCdSzXZr
 
     driverClassName: "com.mysql.cj.jdbc.Driver"
 
 #    local db for testing
-#    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/WDA}
-#    password: ${DBMS_PASSWORD:root}
-#    username: ${DBMS_USERNAME:root}
+    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/solana}
+    password: ${DBMS_PASSWORD:root}
+    username: ${DBMS_USERNAME:root}
+
   redis:
     host: redis-18995.c1.ap-southeast-1-1.ec2.redns.redis-cloud.com
     port: 18995

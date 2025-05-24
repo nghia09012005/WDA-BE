@@ -23,7 +23,7 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private static final String[] PUBLIC_ENDPOINT = {"/api/signin", "/api/signup", "/api/users", "/api/users/uswt", "/api/users/{id}", "/api/users/stats/{name}", "/api/users/stats/set", "/api/users/stats/me", "/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**","/webjars/**","/api/users/test-redis","/leaderboard/add","leaderboard/top"};
+    private static final String[] PUBLIC_ENDPOINT = {"/api/signin", "/api/signup", "/api/users", "/api/users/uswt", "/api/users/{id}", "/api/users/stats/{name}", "/api/users/stats/set", "/api/users/stats/me", "/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**","/webjars/**","/api/users/test-redis","/leaderboard/add","/leaderboard/top"};
 
     @Autowired
     private JwtFilter jwtFilter;
@@ -47,7 +47,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://wda2025.vercel.app")); // Use http:// as in your WebConfig
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // Be specific if possible
         configuration.setAllowCredentials(true);

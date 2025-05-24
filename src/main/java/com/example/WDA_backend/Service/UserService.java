@@ -57,15 +57,16 @@ public class UserService {
 
         UserStats userStats = userStatsRepo.findByUsername(username).orElse(null); // Tìm kiếm UserStats theo userId
         if(userStats == null){return null;}
-        String val = redis.getValue("user:"+username);
-        System.out.println("val:"+val);
-        String[] parts = val.split(" ");
-        double money = Double.parseDouble(parts[0]);
-        int exp = Integer.parseInt(parts[1]);
-        userStats.setMoney(money);
-        userStats.setExp(exp);
-        redis.deleteFromRedis("user:"+username);
-        userStatsRepo.save(userStats);
+//        String val = redis.getValue("user:"+username);
+//        System.out.println("val:"+val);
+//        String[] parts = val.split(" ");
+//        double money = Double.parseDouble(parts[0]);
+//        int exp = Integer.parseInt(parts[1]);
+//        userStats.setMoney(money);
+//        userStats.setExp(exp);
+//        redis.deleteFromRedis("user:"+username);
+//        userStatsRepo.save(userStats);
+      
         return userStats;
     }
 
